@@ -4,8 +4,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
+import android.os.AsyncTask;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
     private RecyclerView mForecastListRV;
     private ForecastAdapter mForecastAdapter;
     private Toast mToast;
+    private TextView mLoadingErrorTV;
+    private ProgressBar mLoadingPB;
+   // private EditText mSearchBoxET;
 
     private static final String[] dummyForecastData = {
             "Sunny and Warm - 75F",
@@ -52,18 +63,20 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mForecastListRV = (RecyclerView)findViewById(R.id.rv_forecast_list);
+        //mSearchBoxET = findViewById(R.id.et_search_box);
+       // mForecastListRV = findViewById(R.id.rv_search_results);
+        mLoadingErrorTV = findViewById(R.id.tv_loading_error);
+        mLoadingPB = findViewById(R.id.pb_loading);
 
+        mForecastListRV = (RecyclerView) findViewById(R.id.rv_forecast_list);
         mForecastListRV.setLayoutManager(new LinearLayoutManager(this));
         mForecastListRV.setHasFixedSize(true);
 
         mForecastAdapter = new ForecastAdapter(this);
         mForecastListRV.setAdapter(mForecastAdapter);
 
-        mForecastAdapter.updateForecastData(
-                new ArrayList<String>(Arrays.asList(dummyForecastData)),
-                new ArrayList<String>(Arrays.asList(dummyDetailedForecastData))
-        );
+
+        doForecastSearch();
     }
 
     @Override
@@ -73,5 +86,53 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
         }
         mToast = Toast.makeText(this, detailedForecast, Toast.LENGTH_LONG);
         mToast.show();
+
+
+    }
+
+
+
+
+    private void doForecastSearch() {
+        String url = ForecastUtils.buildForecastSearchURL();
+
+        new ForecastSearchTask().execute(url);
+    }
+
+    class ForecastSearchTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mLoadingPB.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String url = urls[0];
+            String results = null;
+            try {
+                results = NetworkUtils.doHTTPGet(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return results;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                mLoadingErrorTV.setVisibility(View.INVISIBLE);
+                mForecastListRV.setVisibility(View.VISIBLE);
+                ForecastUtils.forecastRes[] items = ForecastUtils.parseForecastSearchResults(s);
+
+                mForecastAdapter.updateForecastData(items);
+            } else {
+                mLoadingErrorTV.setVisibility(View.VISIBLE);
+                mForecastListRV.setVisibility(View.INVISIBLE);
+            }
+            mLoadingPB.setVisibility(View.INVISIBLE);
+        }
     }
 }

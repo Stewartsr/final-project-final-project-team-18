@@ -18,9 +18,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         mOnForecastItemClickListener = onForecastItemClickListener;
     }
 
-    public void updateForecastData(ArrayList<String> forecastData, ArrayList<String> detailedForecastData) {
-        mForecastData = forecastData;
-        mDetailedForecastData = detailedForecastData;
+    public void updateForecastData(ForecastUtils.forecastRes[] forecastData) {
+        mForecastData = forecastData.dt_txt;
+        mDetailedForecastData = forecastData.description;
         notifyDataSetChanged();
     }
 
@@ -42,7 +42,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     @Override
     public void onBindViewHolder(ForecastItemViewHolder holder, int position) {
-        holder.bind(mForecastData.get(position));
+        holder.bind(mForecastData[position]);
     }
 
     public interface OnForecastItemClickListener {
@@ -51,6 +51,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     class ForecastItemViewHolder extends RecyclerView.ViewHolder {
         private TextView mForecastTextView;
+        private TextView mForecastdescView;
+        private TextView mForecastTempView;
 
         public ForecastItemViewHolder(View itemView) {
             super(itemView);
@@ -65,8 +67,12 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             });
         }
 
-        public void bind(String forecast) {
-            mForecastTextView.setText(forecast);
+        public void bind(ForecastUtils.forecastRes forecast) {
+            mForecastTextView.setText(forecast.dt_txt);
+            mForecastdescView.setText(forecast.description);
+            mForecastTempView.setText(forecast.temperature);
         }
+
+
     }
 }
