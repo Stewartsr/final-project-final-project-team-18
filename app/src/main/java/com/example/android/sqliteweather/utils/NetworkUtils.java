@@ -1,5 +1,4 @@
-package com.example.android.connectedweather;
-
+package com.example.android.sqliteweather.utils;
 
 import java.io.IOException;
 
@@ -12,12 +11,16 @@ public class NetworkUtils {
     private static final OkHttpClient mHTTPClient = new OkHttpClient();
 
     public static String doHTTPGet(String url) throws IOException {
-        Request req = new Request.Builder().url(url).build();
-        Response res = mHTTPClient.newCall(req).execute();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = mHTTPClient.newCall(request).execute();
+
         try {
-            return res.body().string();
+            return response.body().string();
         } finally {
-            res.close();
+            response.close();
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.android.connectedweather;
+package com.example.android.sqliteweather;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
