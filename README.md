@@ -1,73 +1,43 @@
-# Assignment 2
-**Due by 11:59pm on Monday, 2/11/2019**
+#CS 492 Final Project 
+Code and demo due by 5:00pm on Friday, 3/22/2018
+In this course, a final programming project will take the place of formal exams to test your understanding of the material.  The final project will involve working with a team of 3-4 people to implement a substantial Android app that utilizes the major features we’ve looked at this term.  Specifically, you and your teammates will write an app that satisfies all of these requirements:
 
-**Demo due by 11:59pm on Monday, 2/25/2019**
+It should have multiple activities the user can navigate between.
+It should use at least one implicit intent to launch another app.
+It should communicate via HTTP(s) with a third-party API to provide data for the app and optionally to send data back to the API.
+It must implement activity lifecycle methods to ensure that activity-related data is handled elegantly through lifecycle events.
+It should either store user preferences (via SharedPreferences) or store data in device storage (using SQLite). You may do both of these things if you want.
+It should have a polished, well-styled user interface.
 
-In this assignment, we'll continue working on our weather app, hooking it up to data from the OpenWeatherMap API and using Intents to start new activities.  The parts of the assignment are outlined below.
+You’ve written your proposals already, so you should know what app you’re going to work on.  This document contains a few more details about the process for the project.
+GitHub repositories
+The code for your final project must be in a GitHub repository set up via GitHub Classroom.  You can use this link to form your team and create your final project repository:
 
-## 1. Hook your app up to the OpenWeatherMap API
+https://classroom.github.com/g/-FhUjpYJ
 
-This repository provides you with some starter code that displays dummy forecast data in a `RecyclerView`.  Your first task for this assignment is to write an `AsyncTask` to fetch forecast data from the OpenWeatherMap API and to display that data in the `RecyclerView` instead of the dummy data.  You can find more info about the OpenWeatherMap API here: https://openweathermap.org/api.  Here are some steps you can follow to get everything working for this part of the assignment:
+The repository created for your team will be public by default, and I encourage you to keep it public.  These final projects should be nice demonstrations of your Android development abilities and will be a good item to have in your CS portfolio.  It will be great to have the code in a public GitHub repo so you can share it easily when you want to.  However, you will have full administrative control over the repository that’s created for your project, which means you’ll be able to make it private if you wish.
 
-  1. Sign up for an OpenWeatherMap API key here: http://openweathermap.org/appid.  You'll need this to make calls to the API.  If signing up for an API key is a problem for you, please contact me.
+If you’ve already started a GitHub repo for your project, don’t worry.  The repository created via the GitHub classroom link above will be completely empty, so you can simply use git remotes to work with both repositories.  I can help you set that up if needed.
+Working with a team on a shared GitHub repo
 
-  2. Write a utility method to construct a URL to query OpenWeatherMap's 5-day forecast API for a specified city name.  You can read more about this API here: https://openweathermap.org/forecast5.  Make sure you include your API key as a query string parameter in your URL.
+When working with a team on a shared GitHub repo, it’s a good idea to use a workflow that uses branches and pull requests.  This has a few advantages:
 
-  3. Write a subclass of `AsyncTask` that uses a URL from the method you just wrote to get forecast data from OpenWeatherMap.  Your `AsyncTask` should do the following things:
-      * Display a `ProgressBar` in `onPreExecute()`.
-      * Fetch forecast data for a specified city as a JSON string in `doInBackground()`.  For this assignment, you can hard code the name of a city for which to fetch data in your main activity class (e.g. "Corvallis,US").
-      * In `onPostExecute()`:
-        * Hide the `ProgressBar`.
-        * If for some reason you were unable to fetch forecast data in `doInBackground()`, display an error message.
-        * If you successfully fetched forecast data, pass it into the `ForecastAdapter` using its `updateForecastData()` method to display the data in the `RecyclerView`.
+By not working within the same branch, you can better avoid causing conflicts, which can occur when you and another member of your team edit the same parts of the code at the same time.
+It helps you to be more familiar with the entire code base, even the parts that other team members are working on, because you’ll see all of the changes to the code as you review pull requests.  This can help you develop more rapidly because you won’t have to spend as much time understanding code that others have written.
+It helps to ensure high quality code.  Code in pull requests is not incorporated into the master code branch until the code request is reviewed and approved.  That means everyone has a chance to improve pull request code before it becomes permanent.
 
-  4. Call your `AsyncTask` from your main activity class's `onCreate()` to make sure data is loaded when the app starts.
+One simple but effective branch- and pull-request-based workflow you might consider is the GitHub flow: https://guides.github.com/introduction/flow/.
+Grading demonstrations
+The grade for your project will include a brief (10-15 minute) demonstration to me of your project’s functionality.  To get a grade for your project, your team must do a demo.  Demonstrations will be scheduled for finals week.  I’ll send more details on scheduling via email.
+Code submission
+All code for your final project must be pushed to the master branch of the repo created for your team using the GitHub Classroom link above before your grading demo.
+Grading criteria
+Your team’s grade (out of 150 points) for the final project will be based on successfully implementing a complete Android app that satisfies the criteria listed above.  Remember, if your team does not do a demo for your project, you will receive a zero for it.
+Individual grades
+Your individual grade for the project will be based on your team’s grade and also on evidence of your meaningful participation in your team’s work on the project, including from these sources:
 
-  5. Write a utility method to parse the JSON data returned by OpenWeatherMap into an `ArrayList` of `String` objects, where each string in the list represents a forecast for one date/time entry in the JSON data.  Specifically, each string should contain the following fields from one entry from `list` in the JSON data:
-      * `dt_txt` - the date and time
-      * `main.temp` - the temperature (make sure you get the units right)
-      * `weather.main` - a general description of the weather
+The commit log of your GitHub repository.
+Your presence at and participation in your team’s project demo.
+Individual team evaluation.
 
-      Don't worry too much about formatting your string super nicely (e.g. don't worry about converting UTC time into local time for now).  For example, one of your weather strings might look like this:
-      ```
-      2017-04-29 00:00:00 - Clear - 54F
-      ```
-      Plug this parsing method into your `AsyncTask` to parse the JSON data before you pass it into the adapter.
-
-## 2. Use an Intent to start a new activity
-
-Once you have your app hooked up to the OpenWeatherMap API, implement functionality that allows the user to click on any item in the forecast list to view a "detailed" version of that forecast.  Here are some steps you can follow for this part of the assignment:
-
-  1. Implement a new activity to represent the "detailed" view of the forecast.  To do this, you should write:
-      * A new layout XML file for this activity.  At a minimum, this layout should contain a `TextView` you can use to display the weather string.
-      * A new subclass of `AppCompatActivity`.  At a minimum, this class should implement an `onCreate()` method that does the following:
-        * Uses `getIntent()` to get the `Intent` that initiated the activity.
-        * If the `Intent` was not `null`, grabs the forecast extra from the `Intent` and displays it in the activity's `TextView`.
-
-  2. Add an entry in `AndroidManifest.xml` for the new activity.
-
-  3. The app is currently set up to handle clicks on individual items in the forecast list by displaying a toast with the corresponding detailed forecast.  Change this functionality so that a new explicit `Intent` is created to start the new activity you just implemented.  When a forecast item is clicked, pass the the forecast as an argument to the click handler and then into the `Intent` as an extra, and use the `Intent` to start the activity.
-
-## 3. Add some implicit intents
-
-Finally, add the following features using implicit intents:
-
-  1. Add an action to the action bar of the main activity that allows the user to see in a map the location for which the forecast is displayed.
-
-  2. Add an action to the action bar of the "detailed" forecast activity that allows the user to share the "detailed" forecast text.  Use the `ShareCompat` class's `IntentBuilder` to create an implicit intent to accomplish this.
-
-## Submission
-
-As usual, we'll be using GitHub Classroom for this assignment, and you will submit your assignment via GitHub.  Make sure your completed files are committed and pushed by the assignment's deadline to the master branch of the GitHub repo that was created for you by GitHub Classroom.  A good way to check whether your files are safely submitted is to look at the master branch your assignment repo on the github.com website (i.e. https://github.com/OSU-CS492-W19/assignment-2-YourGitHubUsername/). If your changes show up there, you can consider your files submitted.
-
-## Grading criteria
-
-This assignment is worth 100 total points, broken down as follows:
-
-  * 50 points: The app fetches and displays data from the OpenWeatherMap API
-
-  * 30 points: The app uses an explicit intent to start a "detailed" forecast activity whenever the user clicks on an item in the forecast list
-
-  * 20 points: The app uses implicit intents to launch other activities:
-    * 10 points: The app includes an action in the main activity's action bar to allow the user to see the forecast location in a map
-    * 10 points: The app includes an action in the "detailed" forecast activity's action bar to allow the user to share the text of the "detailed" forecast
+In particular, if your GitHub commit log shows that you did not make meaningful contributions to your team’s implementation of your app, if you do not participate in your team’s demonstration of your app (without explicit prior approval by me), or if your teammates indicate in their team evaluations that you didn’t meaningfully contribute to the team’s effort, you will receive a lower grade on the project than your teammates.  I may use other sources as evidence of your participation, as well.
