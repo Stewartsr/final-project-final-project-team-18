@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">SQLite Weather</string>
+    <string name="app_name">SteamLite</string>
 
     <string name="forecast_for">Forecast for</string>
-    <string name="loading_error_message">Woops.  We couldn\'t load your forecast.  Verify that you\'ve entered a valid OpenWeatherMap API key, check your internet connection, and try again.</string>
+    <string name="loading_error_message">API Key Error</string>
 
     <string name="action_share">Share forecast</string>
     <string name="action_location">Show forecast location</string>

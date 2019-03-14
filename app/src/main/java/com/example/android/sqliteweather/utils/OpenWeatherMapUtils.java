@@ -18,7 +18,7 @@ public class OpenWeatherMapUtils {
 
     public static final String EXTRA_FORECAST_ITEM = "com.example.android.lifecycleweather.utils.ForecastItem";
 
-    private final static String OWM_FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast";
+    private final static String OWM_FORECAST_BASE_URL = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=36CA30F19E38A1E627CED21BA4CD3342&steamid=76561197960435530&relationship=friend";
     private final static String OWM_ICON_URL_FORMAT_STR = "https://openweathermap.org/img/w/%s.png";
     private final static String OWM_FORECAST_QUERY_PARAM = "q";
     private final static String OWM_FORECAST_UNITS_PARAM = "units";
@@ -29,7 +29,7 @@ public class OpenWeatherMapUtils {
     /*
      * Set your own APPID here.
      */
-    private final static String OWM_FORECAST_APPID = "INSERT_YOUR_API_KEY_HERE";
+    private final static String OWM_FORECAST_APPID = "36CA30F19E38A1E627CED21BA4CD3342";
 
 
     /*
