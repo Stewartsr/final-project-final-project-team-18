@@ -2,6 +2,7 @@ package com.example.android.sqliteweather.utils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.android.sqliteweather.R;
 import com.example.android.sqliteweather.data.ForecastItem;
@@ -18,18 +19,17 @@ public class OpenWeatherMapUtils {
 
     public static final String EXTRA_FORECAST_ITEM = "com.example.android.lifecycleweather.utils.ForecastItem";
 
-    private final static String OWM_FORECAST_BASE_URL = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=36CA30F19E38A1E627CED21BA4CD3342&steamid=76561197960435530&relationship=friend";
+    private final static String OWM_FORECAST_BASE_URL = " http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002";
+//  private final static String OWM_FORECAST_BASE_URL = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=36CA30F19E38A1E627CED21BA4CD3342&steamid=76561197960435530&relationship=friend";
     private final static String OWM_ICON_URL_FORMAT_STR = "https://openweathermap.org/img/w/%s.png";
-    private final static String OWM_FORECAST_QUERY_PARAM = "q";
-    private final static String OWM_FORECAST_UNITS_PARAM = "units";
-    private final static String OWM_FORECAST_APPID_PARAM = "appid";
-    private final static String OWM_FORECAST_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private final static String OWM_FORECAST_TIME_ZONE = "UTC";
+    private final static String OWM_FORECAST_APPID_PARAM = "key";
+    private final static String OWM_FORECAST_STEAMID_PARAM = "steamids";
 
     /*
      * Set your own APPID here.
      */
     private final static String OWM_FORECAST_APPID = "36CA30F19E38A1E627CED21BA4CD3342";
+    private final static String OWM_FORECAST_USERID = "76561197960435530";
 
 
     /*
@@ -67,9 +67,8 @@ public class OpenWeatherMapUtils {
 
     public static String buildForecastURL(String forecastLocation, String temperatureUnits) {
         return Uri.parse(OWM_FORECAST_BASE_URL).buildUpon()
-                .appendQueryParameter(OWM_FORECAST_QUERY_PARAM, forecastLocation)
-                .appendQueryParameter(OWM_FORECAST_UNITS_PARAM, temperatureUnits)
                 .appendQueryParameter(OWM_FORECAST_APPID_PARAM, OWM_FORECAST_APPID)
+                .appendQueryParameter(OWM_FORECAST_STEAMID_PARAM, OWM_FORECAST_USERID)
                 .build()
                 .toString();
     }
@@ -83,8 +82,7 @@ public class OpenWeatherMapUtils {
         OWMForecastResults results = gson.fromJson(forecastJSON, OWMForecastResults.class);
         if (results != null && results.list != null) {
             ArrayList<ForecastItem> forecastItems = new ArrayList<>();
-            SimpleDateFormat dateParser = new SimpleDateFormat(OWM_FORECAST_DATE_FORMAT);
-            dateParser.setTimeZone(TimeZone.getTimeZone(OWM_FORECAST_TIME_ZONE));
+
 
             /*
              * Loop through all results parsed from JSON and condense each one into one
@@ -93,12 +91,6 @@ public class OpenWeatherMapUtils {
             for (OWMForecastListItem listItem : results.list) {
                 ForecastItem forecastItem = new ForecastItem();
 
-                try {
-                    forecastItem.dateTime = dateParser.parse(listItem.dt_txt);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    forecastItem.dateTime = null;
-                }
 
                 forecastItem.description = listItem.weather[0].description;
                 forecastItem.icon = listItem.weather[0].icon;
