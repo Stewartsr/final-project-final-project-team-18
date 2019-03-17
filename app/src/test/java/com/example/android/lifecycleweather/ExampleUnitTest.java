@@ -1,4 +1,4 @@
-package com.example.android.sqliteweather;
+package com.example.android.lifecycleweather;
 
 import org.junit.Test;
 

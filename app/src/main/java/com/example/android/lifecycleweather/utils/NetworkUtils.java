@@ -1,4 +1,4 @@
-package com.example.android.sqliteweather.utils;
+package com.example.android.lifecycleweather.utils;
 
 import java.io.IOException;
 
