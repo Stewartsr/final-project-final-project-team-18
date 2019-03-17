@@ -1,43 +1,74 @@
-#CS 492 Final Project 
-Code and demo due by 5:00pm on Friday, 3/22/2018
-In this course, a final programming project will take the place of formal exams to test your understanding of the material.  The final project will involve working with a team of 3-4 people to implement a substantial Android app that utilizes the major features we’ve looked at this term.  Specifically, you and your teammates will write an app that satisfies all of these requirements:
+# Assignment 3
+**Due by 11:59pm on Monday, 2/25/2019**
 
-It should have multiple activities the user can navigate between.
-It should use at least one implicit intent to launch another app.
-It should communicate via HTTP(s) with a third-party API to provide data for the app and optionally to send data back to the API.
-It must implement activity lifecycle methods to ensure that activity-related data is handled elegantly through lifecycle events.
-It should either store user preferences (via SharedPreferences) or store data in device storage (using SQLite). You may do both of these things if you want.
-It should have a polished, well-styled user interface.
+**Demo due by 11:59pm on Monday, 3/11/2019**
 
-You’ve written your proposals already, so you should know what app you’re going to work on.  This document contains a few more details about the process for the project.
-GitHub repositories
-The code for your final project must be in a GitHub repository set up via GitHub Classroom.  You can use this link to form your team and create your final project repository:
+In this assignment, we'll adapt our weather app to gracefully deal with transitions in the activity lifecycle by incorporating an `AsyncTaskLoader`.  You'll also add some basic user preferences to the app.
 
-https://classroom.github.com/g/-FhUjpYJ
+There are a few different tasks associated with this assignment, described below.  This repository provides you with some starter code that implements the connected weather app from assignment 2, plus a few extra layout bells and whistles.
 
-The repository created for your team will be public by default, and I encourage you to keep it public.  These final projects should be nice demonstrations of your Android development abilities and will be a good item to have in your CS portfolio.  It will be great to have the code in a public GitHub repo so you can share it easily when you want to.  However, you will have full administrative control over the repository that’s created for your project, which means you’ll be able to make it private if you wish.
+**NOTE: make sure to add your own API key in `OpenWeatherMapUtils.java` to make the app work.**
 
-If you’ve already started a GitHub repo for your project, don’t worry.  The repository created via the GitHub classroom link above will be completely empty, so you can simply use git remotes to work with both repositories.  I can help you set that up if needed.
-Working with a team on a shared GitHub repo
+## 1. Use `AsyncTaskLoader` to load results
 
-When working with a team on a shared GitHub repo, it’s a good idea to use a workflow that uses branches and pull requests.  This has a few advantages:
+One thing you might notice is that when you do things like rotate your device when viewing the main activity, the activity is recreated, resulting in a new network call to fetch the same weather forecast data (you can know this is happening because the loading indicator will be displayed, indicating that the `AsyncTask` for fetching forecast data from OpenWeatherMap is running).
 
-By not working within the same branch, you can better avoid causing conflicts, which can occur when you and another member of your team edit the same parts of the code at the same time.
-It helps you to be more familiar with the entire code base, even the parts that other team members are working on, because you’ll see all of the changes to the code as you review pull requests.  This can help you develop more rapidly because you won’t have to spend as much time understanding code that others have written.
-It helps to ensure high quality code.  Code in pull requests is not incorporated into the master code branch until the code request is reviewed and approved.  That means everyone has a chance to improve pull request code before it becomes permanent.
+Your first task in this assignment is to fix this problem by replacing the app's current `AsyncTask` with an `AsyncTaskLoader`, which can better cope with activity lifecycle transitions because it lives beyond the lifecycle of the activity and can cache results and return them.
 
-One simple but effective branch- and pull-request-based workflow you might consider is the GitHub flow: https://guides.github.com/introduction/flow/.
-Grading demonstrations
-The grade for your project will include a brief (10-15 minute) demonstration to me of your project’s functionality.  To get a grade for your project, your team must do a demo.  Demonstrations will be scheduled for finals week.  I’ll send more details on scheduling via email.
-Code submission
-All code for your final project must be pushed to the master branch of the repo created for your team using the GitHub Classroom link above before your grading demo.
-Grading criteria
-Your team’s grade (out of 150 points) for the final project will be based on successfully implementing a complete Android app that satisfies the criteria listed above.  Remember, if your team does not do a demo for your project, you will receive a zero for it.
-Individual grades
-Your individual grade for the project will be based on your team’s grade and also on evidence of your meaningful participation in your team’s work on the project, including from these sources:
+To replace the app's `AsyncTask` with an `AsyncTaskLoader`, you'll need to make its `MainActivity` class implement the `LoaderManager.LoaderCallbacks` interface by implementing the `onCreateLoader()`, `onFinishedLoading()`, and `onLoaderReset()` methods and moving functionality from the `AsyncTask` to the appropriate place among these methods.
 
-The commit log of your GitHub repository.
-Your presence at and participation in your team’s project demo.
-Individual team evaluation.
+One place to pay special attention to is `onCreateLoader()`.  From this method, you should return an instance of a subclass of `AsyncTaskLoader`.  Within this class, you should do the following things:
 
-In particular, if your GitHub commit log shows that you did not make meaningful contributions to your team’s implementation of your app, if you do not participate in your team’s demonstration of your app (without explicit prior approval by me), or if your teammates indicate in their team evaluations that you didn’t meaningfully contribute to the team’s effort, you will receive a lower grade on the project than your teammates.  I may use other sources as evidence of your participation, as well.
+  * Implement the `onStartLoading()` and `loadInBackground()` methods to perform the correct portions of the call to the OpenWeatherMap API.
+
+  * Cache results returned from the OpenWeatherMap API and deliver them when possible.
+
+  * Include log statements that clearly indicate when your loader is fetching results from the OpenWeatherMap API and when it is delivering cached results.
+
+As a result of these changes, you should see your app fetch results from the OpenWeatherMap API only one time through typical usage of the app, including through rotations of the phone and navigation around the app.
+
+## 2. Add some basic user preferences to the app
+
+When you run the version of the app provided in this repository, you'll probably notice a settings icon in the title bar of the main activity.  Your second task in this assignment is to create a new activity named `SettingsActivity` that implements a user preferences screen using a `PreferenceFragment`.  This activity should be launched when you click the settings icon in the main activity.
+
+The preferences screen should allow the user to set the following preferences:
+
+  * **Weather units** - The user should be allowed to select between "Imperial", "Metric", and "Kelvin", and the currently-selected value should be displayed as the summary for the preference.  See the OpenWeatherMap API documentation here for more info on how this preference value will be used: https://openweathermap.org/forecast5#data.
+
+  * **Weather location** - The user should be allowed to enter an arbitrary location for which to fetch weather.  The currently-set value should be set as the summary for the preference.  You can specify any default location you'd like.  See the OpenWeatherMap API documentation here for more info on how this preference value will be used: https://openweathermap.org/forecast5#name5.
+
+The settings of these preferences should affect the URL used to query the OpenWeatherMap API.  The app should be hooked up so that any change to the preferences results in the OpenWeatherMap API being re-queried and the new results being displayed.  Importantly, there are a couple places in the UI and elsewhere that will also need to be updated in response to a change in preferences:
+  * The weather location displayed at the top of the main activity.
+  * The units displayed in the forecast list and the forecast detail view.
+  * The location displayed in the map when the corresponding action bar action is triggered.
+  * The currently set forecast location in the text shared by the share action.
+
+All of these values are currently taken from the class `WeatherPreferences`.
+
+## Extra credit
+
+You may have noticed that Android's `Loader` framework is newly deprecated, including the `AsyncTaskLoader`.  It is being replaced with a paradigm based on the [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel), which is a class designed to store and manage UI-related data in an activity lifecycle-aware way, but that is lighter-weight and less strongly-tied to UI classes than loaders.
+
+For up to 10 points of extra credit, replace the `AsyncTaskLoader` you implemented above with a `ViewModel`-based solution for connecting with the OpenWeatherMap API and managing the forecast data it returns.  Your `ViewModel` should use an `AsyncTask` for sending the HTTP request to the OpenWeatherMap API.  If you successfully use a `ViewModel` for managing forecast data, you will earn full credit for the first part of the assignment, even if your app doesn't use an `AsyncTaskLoader`.
+
+## Submission
+
+As usual, we'll be using GitHub Classroom for this assignment, and you will submit your assignment via GitHub. Make sure your completed files are committed and pushed by the assignment's deadline to the master branch of the GitHub repo that was created for you by GitHub Classroom. A good way to check whether your files are safely submitted is to look at the master branch your assignment repo on the github.com website (i.e. https://github.com/OSU-CS492-W18/assignment-3-YourGitHubUsername/). If your changes show up there, you can consider your files submitted.
+
+## Grading criteria
+
+This assignment is worth 100 points, broken down as follows:
+
+  * 50 points: Uses `AsyncTaskLoader` and caches results
+    * 30 points: uses `AsyncTaskLoader` instead of `AsyncTask` to perform communication with the OpenWeatherMap API
+    * 15 points: caches results from the OpenWeatherMap API in the loader and delivers them when possible (should only need to make one network call)
+    * 5 points: adds logging statements to demonstrate when the loader is fetching results and when it is delivering cached ones
+
+  * 50 points: Implements user settings activity
+    * 15 points: uses a preference fragment to allow the user to select units and forecast location
+    * 5 points: summaries of both preferences reflect the current values of those preferences
+    * 30 points: changing preferences results in new results being displayed and correct updates made to UI, as described above
+
+  * Extra credit:
+    * 10 points: Uses a `ViewModel` to fetch, store, and manage data from the OpenWeatherMap API instead of an `AsyncTaskLoader`
+      * If you successfully use a `ViewModel` for managing forecast data, you will earn full credit for the first part of the assignment, even if your app doesn't use an `AsyncTaskLoader`.

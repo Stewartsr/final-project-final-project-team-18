@@ -1,4 +1,4 @@
-package com.example.android.sqliteweather;
+package com.example.android.lifecycleweather;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
