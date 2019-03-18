@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.lifecycleweather">
+    package="com.example.android.steamLite">
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".ForecastItemDetailActivity"
+            android:name=".FriendItemDetailActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

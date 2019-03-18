@@ -1,4 +1,4 @@
-package com.example.android.lifecycleweather;
+package com.example.android.steamLite;
 
 import org.junit.Test;
 

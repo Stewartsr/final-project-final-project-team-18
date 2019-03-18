@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_weather_icon"
+        android:id="@+id/iv_steam_icon"
         android:padding="4dp"
         android:layout_width="128dp"
         android:layout_height="128dp" />

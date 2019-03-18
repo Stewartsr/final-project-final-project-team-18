@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.lifecycleweather.MainActivity">
+    tools:context="com.example.android.steamLite.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +19,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/forecast_for"
+            android:text="@string/friend_for"
             android:textColor="#fff"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/tv_forecast_location"
+            android:id="@+id/tv_friend_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -38,7 +38,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_forecast_items"
+            android:id="@+id/rv_friend_items"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

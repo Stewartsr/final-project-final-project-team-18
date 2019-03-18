@@ -1,4 +1,4 @@
-package com.example.android.lifecycleweather;
+package com.example.android.steamLite;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,22 +14,22 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.lifecycleweather.data.WeatherPreferences;
-import com.example.android.lifecycleweather.utils.NetworkUtils;
-import com.example.android.lifecycleweather.utils.OpenWeatherMapUtils;
+import com.example.android.steamLite.data.SteamPreferences;
+import com.example.android.steamLite.utils.NetworkUtils;
+import com.example.android.steamLite.utils.OpenSteamMapUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ForecastAdapter.OnForecastItemClickListener {
+public class MainActivity extends AppCompatActivity implements com.example.android.steamLite.FriendAdapter.OnFriendItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private TextView mForecastLocationTV;
-    private RecyclerView mForecastItemsRV;
+    private TextView mFriendLocationTV;
+    private RecyclerView mFriendItemsRV;
     private ProgressBar mLoadingIndicatorPB;
     private TextView mLoadingErrorMessageTV;
-    private ForecastAdapter mForecastAdapter;
+    private com.example.android.steamLite.FriendAdapter mFriendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +39,25 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
         // Remove shadow under action bar.
         getSupportActionBar().setElevation(0);
 
-        mForecastLocationTV = findViewById(R.id.tv_forecast_location);
-        mForecastLocationTV.setText(WeatherPreferences.getDefaultForecastLocation());
+        mFriendLocationTV = findViewById(R.id.tv_friend_location);
+        mFriendLocationTV.setText(SteamPreferences.getDefaultFriendLocation());
 
         mLoadingIndicatorPB = findViewById(R.id.pb_loading_indicator);
         mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
-        mForecastItemsRV = findViewById(R.id.rv_forecast_items);
+        mFriendItemsRV = findViewById(R.id.rv_friend_items);
 
-        mForecastAdapter = new ForecastAdapter(this);
-        mForecastItemsRV.setAdapter(mForecastAdapter);
-        mForecastItemsRV.setLayoutManager(new LinearLayoutManager(this));
-        mForecastItemsRV.setHasFixedSize(true);
+        mFriendAdapter = new com.example.android.steamLite.FriendAdapter(this);
+        mFriendItemsRV.setAdapter(mFriendAdapter);
+        mFriendItemsRV.setLayoutManager(new LinearLayoutManager(this));
+        mFriendItemsRV.setHasFixedSize(true);
 
-        loadForecast();
+        loadFriend();
     }
 
     @Override
-    public void onForecastItemClick(OpenWeatherMapUtils.Player forecastItem) {
-        Intent intent = new Intent(this, ForecastItemDetailActivity.class);
-        intent.putExtra(OpenWeatherMapUtils.EXTRA_FORECAST_ITEM, forecastItem);
+    public void onFriendItemClick(OpenSteamMapUtils.Player FriendItem) {
+        Intent intent = new Intent(this, com.example.android.steamLite.FriendItemDetailActivity.class);
+        intent.putExtra(OpenSteamMapUtils.EXTRA_Friend_ITEM, FriendItem);
         startActivity(intent);
     }
 
@@ -71,25 +71,25 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_location:
-                showForecastLocation();
+                showFriendLocation();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void loadForecast() {
-        String openWeatherMapForecastURL = OpenWeatherMapUtils.buildForecastURL(
-                WeatherPreferences.getDefaultForecastLocation(),
-                WeatherPreferences.getDefaultTemperatureUnits()
+    public void loadFriend() {
+        String openSteamMapFriendURL = OpenSteamMapUtils.buildFriendURL(
+                SteamPreferences.getDefaultFriendLocation(),
+                SteamPreferences.getDefaultTemperatureUnits()
         );
-        Log.d(TAG, "got forecast url: " + openWeatherMapForecastURL);
-        new OpenWeatherMapForecastTask().execute(openWeatherMapForecastURL);
+        Log.d(TAG, "got Friend url: " + openSteamMapFriendURL);
+        new OpenSteamMapFriendTask().execute(openSteamMapFriendURL);
     }
 
-    public void showForecastLocation() {
+    public void showFriendLocation() {
         Uri geoUri = Uri.parse("geo:0,0").buildUpon()
-                .appendQueryParameter("q", WeatherPreferences.getDefaultForecastLocation())
+                .appendQueryParameter("q", SteamPreferences.getDefaultFriendLocation())
                 .build();
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
         }
     }
 
-    class OpenWeatherMapForecastTask extends AsyncTask<String, Void, String> {
+    class OpenSteamMapFriendTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -106,26 +106,26 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.O
 
         @Override
         protected String doInBackground(String... params) {
-            String openWeatherMapURL = params[0];
-            String forecastJSON = null;
+            String openSteamMapURL = params[0];
+            String FriendJSON = null;
             try {
-                forecastJSON = NetworkUtils.doHTTPGet(openWeatherMapURL);
+                FriendJSON = NetworkUtils.doHTTPGet(openSteamMapURL);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return forecastJSON;
+            return FriendJSON;
         }
 
         @Override
-        protected void onPostExecute(String forecastJSON) {
+        protected void onPostExecute(String FriendJSON) {
             mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
-            if (forecastJSON != null) {
+            if (FriendJSON != null) {
                 mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
-                mForecastItemsRV.setVisibility(View.VISIBLE);
-                ArrayList<OpenWeatherMapUtils.Player> repos = OpenWeatherMapUtils.parseForecastJSON(forecastJSON);
-                mForecastAdapter.updateForecastItems(repos);
+                mFriendItemsRV.setVisibility(View.VISIBLE);
+                ArrayList<OpenSteamMapUtils.Player> repos = OpenSteamMapUtils.parseFriendJSON(FriendJSON);
+                mFriendAdapter.updateFriendItems(repos);
             } else {
-                mForecastItemsRV.setVisibility(View.INVISIBLE);
+                mFriendItemsRV.setVisibility(View.INVISIBLE);
                 mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
             }
         }
