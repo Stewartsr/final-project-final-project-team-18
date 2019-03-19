@@ -12,4 +12,31 @@
     <string name="friend_item_wind">Wind: %1$d MPH %2$s</string>
     <string name="friend_item_humidity">Humidity: %1$d%%</string>
     <string name="friend_item_share_text">Friend for %1$s, %2$s: %3$d%4$s - %5$s #CS492Steam</string>
+
+    <!-- Strings for theme prefs -->
+    <string name="pref_theme_key" translatable="false">pref_theme</string>
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_Light">Light</string>
+    <string name="pref_theme_Dark">Dark</string>
+    <string name="pref_theme_light_value" translatable="false">light</string>
+    <string name="pref_theme_dark_value" translatable="false">dark</string>
+    <string name="pref_theme_default_value" translatable="false">@string/pref_theme_dark_value</string>
+
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <!-- Strings for size prefs -->
+    <string name="pref_size_key" translatable="false">pref_size</string>
+    <string name="pref_size_title">Size</string>
+    <string name="pref_size_small">Small</string>
+    <string name="pref_size_medium">Medium</string>
+    <string name="pref_size_large">Large</string>
+    <string name="pref_size_small_value" translatable="false">12</string>
+    <string name="pref_size_medium_value" translatable="false">24</string>
+    <string name="pref_size_large_value" translatable="false">36</string>
+    <string name="pref_size_default_value" translatable="false">@string/pref_size_medium_value</string>
+
+    <string name="size_small">Small</string>
+    <string name="size_medium">Medium</string>
+    <string name="size_dark">Large</string>
 </resources>

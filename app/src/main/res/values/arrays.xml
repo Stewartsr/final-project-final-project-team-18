@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="pref_theme_entries">
+        <item>@string/pref_theme_Light</item>
+        <item>@string/pref_theme_Dark</item>
+    </string-array>
+
+    <string-array name="pref_theme_values">
+        <item>@string/pref_theme_light_value</item>
+        <item>@string/pref_theme_dark_value</item>
+    </string-array>
+
+    <string-array name="pref_size_entries">
+        <item>@string/pref_size_small</item>
+        <item>@string/pref_size_medium</item>
+        <item>@string/pref_size_large</item>
+    </string-array>
+
+    <string-array name="pref_size_values">
+        <item>@string/pref_size_small_value</item>
+        <item>@string/pref_size_medium_value</item>
+        <item>@string/pref_size_large_value</item>
+    </string-array>
+
+
+
+
+</resources>
