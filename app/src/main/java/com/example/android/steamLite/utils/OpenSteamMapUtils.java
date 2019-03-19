@@ -27,7 +27,7 @@ public class OpenSteamMapUtils {
      */
 
     private final static String OWM_Friend_APPID = "36CA30F19E38A1E627CED21BA4CD3342";
-    private final static String OWM_Friend_USERID = "76561198004784023";
+    private final static String OWM_Friend_USERID = "76561198278383790,76561197972970824,76561198064301222,76561198041911745,76561197988781934,76561197983803170,76561197987126495,76561198034302446";
 
     /*
      * This class is used as a final representation of a single Friend item.  It condenses the

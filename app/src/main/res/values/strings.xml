@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SteamLite</string>
-    <string name="friend_for">Friend\'s List</string>
+    <string name="friend_for">Friend\'s List For</string>
     <string name="loading_error_message">Woops.  We couldn\'t load your friends.  Check your internet connection and try again.</string>
     <string name="action_share">Share friends</string>
     <string name="action_location">delete this</string>

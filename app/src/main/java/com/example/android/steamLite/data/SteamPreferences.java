@@ -1,7 +1,7 @@
 package com.example.android.steamLite.data;
 
 public class SteamPreferences {
-    private static final String DEFAULT_Friend_LOCATION = "Corvallis,OR,US";
+    private static final String DEFAULT_Friend_LOCATION = "CLIFFORD";
     private static final String DEFAULT_TEMPERATURE_UNITS = "imperial";
 
     public static String getDefaultFriendLocation() {

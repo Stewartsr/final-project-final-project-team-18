@@ -23,6 +23,7 @@
             android:textColor="#fff"
             android:textSize="18sp" />
 
+
         <TextView
             android:id="@+id/tv_friend_location"
             android:layout_width="wrap_content"

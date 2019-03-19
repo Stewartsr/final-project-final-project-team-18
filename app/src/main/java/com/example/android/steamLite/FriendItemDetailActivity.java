@@ -5,14 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.steamLite.utils.OpenSteamMapUtils;
 
 public class FriendItemDetailActivity extends AppCompatActivity {
 
     private TextView mProfileUrl;
-    private TextView mAvatar;
+    private ImageView mAvatar;
     private TextView mPersonaName;
     private TextView mSteamId;
     private TextView mPersonaState;
@@ -24,11 +26,11 @@ public class FriendItemDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_item_detail);
 
-        mProfileUrl = findViewById(R.id.tv_date);
-        mAvatar = findViewById(R.id.tv_temp_description);
-        mPersonaName = findViewById(R.id.tv_low_high_temp);
-        mSteamId = findViewById(R.id.tv_wind);
-        mPersonaState = findViewById(R.id.tv_humidity);
+        mProfileUrl = findViewById(R.id.profileurl);
+        mAvatar = findViewById(R.id.avatar);
+        mPersonaName = findViewById(R.id.personaname);
+        mSteamId = findViewById(R.id.steamid);
+        mPersonaState = findViewById(R.id.personastate);
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(OpenSteamMapUtils.EXTRA_Friend_ITEM)) {
@@ -55,15 +57,16 @@ public class FriendItemDetailActivity extends AppCompatActivity {
 
     private void fillInLayout(OpenSteamMapUtils.Player FriendItem) {
         String profileUrl = FriendItem.profileurl;
-        String avatar = FriendItem.avatar;
         String personaName = FriendItem.personaname;
         String steamId = FriendItem.steamid;
         int personaState = FriendItem.personastate;
 
         mProfileUrl.setText(profileUrl);
-        mAvatar.setText(avatar);
         mPersonaName.setText(personaName);
         mSteamId.setText(steamId);
-        mPersonaState.setText(personaState);
+        //mPersonaState.setText(personaState);
+
+        String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
+        Glide.with(mAvatar.getContext()).load(iconURL).into(mAvatar);
     }
 }
