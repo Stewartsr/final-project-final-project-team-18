@@ -56,15 +56,43 @@ public class FriendItemDetailActivity extends AppCompatActivity {
     }
 
     private void fillInLayout(OpenSteamMapUtils.Player FriendItem) {
-        String profileUrl = FriendItem.profileurl;
-        String personaName = FriendItem.personaname;
-        String steamId = FriendItem.steamid;
-        int personaState = FriendItem.personastate;
+        String profileUrl = "Profile URL:\n" + FriendItem.profileurl;
+        String personaName = "Username:\n" + FriendItem.personaname;
+        String steamId = "Steam ID:\n" + FriendItem.steamid;
+
+        String a;
+        switch (FriendItem.personastate){
+            case 0:
+                a = "Offline";
+                break;
+            case 1:
+                a = "Online";
+                break;
+            case 2:
+                a = "Busy";
+                break;
+            case 3:
+                a = "Away";
+                break;
+            case 4:
+                a = "Snooze";
+                break;
+            case 5:
+                a = "Looking to Trade";
+                break;
+            case 6:
+                a = "Looking to Play";
+                break;
+            default:
+                a = "Thinking";
+        }
+
+        String personaState = "Status:\n" + a;
 
         mProfileUrl.setText(profileUrl);
         mPersonaName.setText(personaName);
         mSteamId.setText(steamId);
-        //mPersonaState.setText(personaState);
+        mPersonaState.setText(personaState);
 
         String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
         Glide.with(mAvatar.getContext()).load(iconURL).into(mAvatar);

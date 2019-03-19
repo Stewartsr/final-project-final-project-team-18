@@ -70,9 +70,10 @@ public class MainActivity extends AppCompatActivity implements com.example.andro
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_location:
+            /*case R.id.action_location:
                 showFriendLocation();
                 return true;
+            */
             default:
                 return super.onOptionsItemSelected(item);
         }
