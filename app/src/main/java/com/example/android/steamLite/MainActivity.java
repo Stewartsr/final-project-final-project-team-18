@@ -70,10 +70,6 @@ public class MainActivity extends AppCompatActivity implements com.example.andro
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*case R.id.action_location:
-                showFriendLocation();
-                return true;
-            */
             case R.id.action_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
@@ -84,22 +80,9 @@ public class MainActivity extends AppCompatActivity implements com.example.andro
     }
 
     public void loadFriend() {
-        String openSteamMapFriendURL = OpenSteamMapUtils.buildFriendURL(
-                SteamPreferences.getDefaultFriendLocation(),
-                SteamPreferences.getDefaultTemperatureUnits()
-        );
+        String openSteamMapFriendURL = OpenSteamMapUtils.buildFriendURL();
         Log.d(TAG, "got Friend url: " + openSteamMapFriendURL);
         new OpenSteamMapFriendTask().execute(openSteamMapFriendURL);
-    }
-
-    public void showFriendLocation() {
-        Uri geoUri = Uri.parse("geo:0,0").buildUpon()
-                .appendQueryParameter("q", SteamPreferences.getDefaultFriendLocation())
-                .build();
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
-        }
     }
 
     class OpenSteamMapFriendTask extends AsyncTask<String, Void, String> {
@@ -135,6 +118,4 @@ public class MainActivity extends AppCompatActivity implements com.example.andro
             }
         }
     }
-
-
 }
