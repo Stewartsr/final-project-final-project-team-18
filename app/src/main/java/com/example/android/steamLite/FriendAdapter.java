@@ -98,7 +98,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendItem
 
             mUserStatus.setText(a);
 
-            String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
+            String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatarfull);
             Glide.with(mSteamIconTV.getContext()).load(iconURL).into(mSteamIconTV);
         }
 

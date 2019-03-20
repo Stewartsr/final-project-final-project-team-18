@@ -1,6 +1,7 @@
 package com.example.android.steamLite;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -50,10 +51,27 @@ public class FriendItemDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // implicit intent for showing current user profile on web
+            case R.id.action_profile:
+                viewProfileOnWeb();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    // this
+    public void viewProfileOnWeb() {
+        if(mFriendItem != null) {
+            Uri profileURI = Uri.parse(mFriendItem.profileurl);
+            Intent intent = new Intent(Intent.ACTION_VIEW, profileURI);
+
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        }
+    }
+
 
     private void fillInLayout(OpenSteamMapUtils.Player FriendItem) {
         String profileUrl = "Profile URL:\n" + FriendItem.profileurl;
@@ -94,7 +112,7 @@ public class FriendItemDetailActivity extends AppCompatActivity {
         mSteamId.setText(steamId);
         mPersonaState.setText(personaState);
 
-        String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
+        String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatarfull);
         Glide.with(mAvatar.getContext()).load(iconURL).into(mAvatar);
     }
 }

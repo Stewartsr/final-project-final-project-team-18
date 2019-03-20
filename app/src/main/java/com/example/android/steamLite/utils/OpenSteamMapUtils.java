@@ -46,7 +46,7 @@ public class OpenSteamMapUtils {
         public String steamid;
         public String personaname;
         public String profileurl;
-        public String avatar;
+        public String avatarfull;
         public int personastate;
     }
 
