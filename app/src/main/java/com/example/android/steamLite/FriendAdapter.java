@@ -1,5 +1,8 @@
 package com.example.android.steamLite;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +31,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendItem
 
     public void updateFriendItems(ArrayList<OpenSteamMapUtils.Player> FriendItems) {
         mFriendItems = FriendItems;
-        //Log.d(TAG, "bind: persona" + FriendItems[0].personaname);
         notifyDataSetChanged();
     }
 
@@ -54,23 +56,22 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendItem
     }
 
     class FriendItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mFriendDateTV; //this is user name
+        private TextView mFriendNameTV; //this is user name
         private TextView mUserStatus;
         private ImageView mSteamIconTV;
 
-
         public FriendItemViewHolder(View itemView) {
             super(itemView);
-            mFriendDateTV = itemView.findViewById(R.id.tv_friend_date);
+            mFriendNameTV = itemView.findViewById(R.id.tv_friend_date);
             mUserStatus = itemView.findViewById(R.id.tv_friend_temp_description);
             mSteamIconTV = itemView.findViewById(R.id.iv_steam_icon);
             itemView.setOnClickListener(this);
         }
 
         public void bind(OpenSteamMapUtils.Player FriendItem) {
-            mFriendDateTV.setText(FriendItem.personaname);
+            mFriendNameTV.setText(FriendItem.personaname);
             String a;
-            switch (FriendItem.personastate){
+            switch (FriendItem.personastate){ // getting correct state string from returned int
                 case 0:
                       a = "Offline";
                     break;
@@ -95,10 +96,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendItem
                     default:
                         a = "Thinking";
             }
-
             mUserStatus.setText(a);
 
-            String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
+            String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatarfull);
             Glide.with(mSteamIconTV.getContext()).load(iconURL).into(mSteamIconTV);
         }
 

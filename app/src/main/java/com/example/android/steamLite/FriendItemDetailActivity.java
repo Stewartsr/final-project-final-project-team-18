@@ -1,6 +1,9 @@
 package com.example.android.steamLite;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +36,7 @@ public class FriendItemDetailActivity extends AppCompatActivity {
         mPersonaState = findViewById(R.id.personastate);
 
         Intent intent = getIntent();
+
         if (intent != null && intent.hasExtra(OpenSteamMapUtils.EXTRA_Friend_ITEM)) {
             mFriendItem = (OpenSteamMapUtils.Player)intent.getSerializableExtra(
                     OpenSteamMapUtils.EXTRA_Friend_ITEM
@@ -50,8 +54,24 @@ public class FriendItemDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // implicit intent for showing current user profile on web
+            case R.id.action_profile:
+                viewProfileOnWeb();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // this opens an implicit intent to view profile in chrome
+    public void viewProfileOnWeb() {
+        if(mFriendItem != null) {
+            Uri profileURI = Uri.parse(mFriendItem.profileurl);
+            Intent intent = new Intent(Intent.ACTION_VIEW, profileURI);
+
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
     }
 
@@ -61,7 +81,7 @@ public class FriendItemDetailActivity extends AppCompatActivity {
         String steamId = "Steam ID:\n" + FriendItem.steamid;
 
         String a;
-        switch (FriendItem.personastate){
+        switch (FriendItem.personastate){ // getting correct state string from returned int
             case 0:
                 a = "Offline";
                 break;
@@ -89,12 +109,19 @@ public class FriendItemDetailActivity extends AppCompatActivity {
 
         String personaState = "Status:\n" + a;
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String s = sharedPreferences.getString("pref_size", "24");
+        mProfileUrl.setTextSize(Float.parseFloat(s));
+        mPersonaName.setTextSize(Float.parseFloat(s));
+        mSteamId.setTextSize(Float.parseFloat(s));
+        mPersonaState.setTextSize(Float.parseFloat(s));
+
         mProfileUrl.setText(profileUrl);
         mPersonaName.setText(personaName);
         mSteamId.setText(steamId);
         mPersonaState.setText(personaState);
 
-        String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatar);
+        String iconURL = OpenSteamMapUtils.buildIconURL(FriendItem.avatarfull);
         Glide.with(mAvatar.getContext()).load(iconURL).into(mAvatar);
     }
 }
